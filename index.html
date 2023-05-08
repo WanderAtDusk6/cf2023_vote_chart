@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sorted Data Visualization</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <canvas id="myChart"></canvas>
+
+  <script>
+    fetch('https://vipact.api.mgtv.com/api/v1/act/vote/charlist?act_name=20230414cf2023&count=50&invoker=mobile-zhifubao&_dx_seq_id=59a8d4cc-f895-f8cf-8e47-cf2f0dfba64c&v=v4')
+      .then(response => response.json())
+      .then((data) => {
+        // 提取角色列表数据
+        const characterList = data.data.character_list
+
+    // 按照票数从高到低对角色列表进行排序
+    characterList.sort((a, b) => b.vote_num - a.vote_num)
+
+    // 取前 10 名角色数据
+    const top10 = characterList.slice(0, 10)
+
+    // 使用 Chart.js 展示数据
+    const ctx = document.getElementById('myChart').getContext('2d')
+    const myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: top10.map(item => item.char_name),
+            datasets: [{
+              label: 'Top 10 Characters by Votes',
+              data: top10.map(item => item.vote_num),
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              borderWidth: 1,
+            }],
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true,
+                },
+              }],
+            },
+          },
+    })
+  })
+  </script>
+</body>
+</html>
