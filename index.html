@@ -11,8 +11,12 @@
 </head>
 <body>
   <div style="max-width: 600px; margin: auto;">
-    <canvas id="myChart" height="80vh"></canvas>
+    <canvas id="myChart"></canvas>
     <p id="difference"></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <!-- <p>author: kako</p> -->
   </div>
 
   <script>
@@ -35,7 +39,7 @@
           data: {
             labels: top5.map(item => item.char_name),
             datasets: [{
-              label: 'Top 5 Characters by Votes',
+              label: 'Top 5 Characters by Votes(综艺-乘风2023)',
               data: top5.map(item => item.vote_num),
               backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)'],
               borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)'],
@@ -56,14 +60,36 @@
     })
 
     // 计算票数差距和百分比
-    const maxVotes = top5[0].vote_num
-    const minVotes = top5[4].vote_num
-    const difference = maxVotes - minVotes
-    const percentage = (difference / maxVotes * 100).toFixed(2)
+    const top1Votes = top5[0].vote_num
+    const top2Votes = top5[1].vote_num
+    const top3Votes = top5[2].vote_num
+    const top4Votes = top5[3].vote_num
+    const top5Votes = top5[4].vote_num
+
+    const top1_2_Diff = top1Votes - top2Votes
+    const top2_3_Diff = top2Votes - top3Votes
+    const top3_4_Diff = top3Votes - top4Votes
+    const top4_5_Diff = top4Votes - top5Votes
+
+    const top1_2_Percentage = ((top1_2_Diff / top2Votes) * 100).toFixed(2)
+    const top2_3_Percentage = ((top2_3_Diff / top3Votes) * 100).toFixed(2)
+    const top3_4_Percentage = ((top3_4_Diff / top4Votes) * 100).toFixed(2)
+    const top4_5_Percentage = ((top4_5_Diff / top5Votes) * 100).toFixed(2)
+
+    function getCurrentTime() {
+          const now = new Date()
+          const year = now.getFullYear()
+          const month = (now.getMonth() + 1).toString().padStart(2, '0')
+          const day = now.getDate().toString().padStart(2, '0')
+          const hours = now.getHours().toString().padStart(2, '0')
+          const minutes = now.getMinutes().toString().padStart(2, '0')
+          const seconds = now.getSeconds().toString().padStart(2, '0')
+          return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`
+    }
 
     // 显示票数差距和百分比
     const differenceElement = document.getElementById('difference')
-    differenceElement.textContent = `Votes difference between top 5: ${difference} (${percentage}%)`
+    differenceElement.innerHTML = `<p>Highest votes: ${top1Votes}, query time: ${getCurrentTime()}</p><p>Top 1 vs Top 2: +${top1_2_Diff} votes ,(+${top1_2_Percentage}%)</p> <p>Top 2 vs Top 3: +${top2_3_Diff} votes (+${top2_3_Percentage}%)</p> <p>Top 3 vs Top 4: +${top3_4_Diff} votes (+${top3_4_Percentage}%)</p> <p>Top 4 vs Top 5: +${top4_5_Diff} votes (+${top4_5_Percentage}%)</p>`
   })
   </script>
 </body>
